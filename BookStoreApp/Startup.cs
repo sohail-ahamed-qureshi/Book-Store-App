@@ -12,10 +12,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BookStoreApp
@@ -32,8 +34,32 @@ namespace BookStoreApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var authenticationSettings = Configuration.GetSection("Settings");
+            services.Configure<AuthenticationSettings>(authenticationSettings);
+
+            //JWT authentication
+            var authSettings = authenticationSettings.Get<AuthenticationSettings>();
+            var key = Encoding.ASCII.GetBytes(authSettings.SecretKey);
+            services.AddAuthentication(auth =>
+            {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(jwt =>
+            {
+                jwt.RequireHttpsMetadata = false;
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
             services.AddControllers();
             services.AddScoped<IUserBL, UserBL>();
+            services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IUserRL, UserRL>();
 
             //Swagger Configurations
@@ -64,6 +90,11 @@ namespace BookStoreApp
                 });
 
             });
+
+            //Email Configurations 
+            var emailConfigure = Configuration.GetSection("EmailSettings")
+                    .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfigure);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

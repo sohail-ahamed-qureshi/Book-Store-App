@@ -17,6 +17,7 @@ namespace BookStoreRepositoryLayer.Services
             //Database connections
             connectionString = configuration.GetSection("ConnectionStrings").GetSection("BookStoreDB").Value;
         }
+
         /// <summary>
         /// ability to register a new User
         /// </summary>
@@ -53,8 +54,18 @@ namespace BookStoreRepositoryLayer.Services
             }
         }
 
-
+        /// <summary>
+        /// ability to login user
+        /// </summary>
+        /// <param name="userData"></param>
+        /// <returns></returns>
         public User Login(Login userData)
+        {
+            User existingUser = GetUserDetails(userData.Email);
+            return existingUser;
+        }
+
+        private User GetUserDetails(string email)
         {
             SqlConnection connection = new SqlConnection(connectionString);
             try
@@ -65,7 +76,7 @@ namespace BookStoreRepositoryLayer.Services
                     SqlCommand command = new SqlCommand(spName, connection);
                     command.CommandType = CommandType.StoredProcedure;
                     connection.Open();
-                    command.Parameters.AddWithValue("@email", userData.Email);
+                    command.Parameters.AddWithValue("@email", email);
                     SqlDataReader dataReader = command.ExecuteReader();
                     User existingUser = new User();
                     while (dataReader.Read())
@@ -91,6 +102,30 @@ namespace BookStoreRepositoryLayer.Services
             {
                 connection.Close();
             }
+        }
+
+        public User ForgotPassword(string email)
+        {
+            try
+            {
+                User existingUser = GetUserDetails(email);
+                return existingUser;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        public User ResetPassword(User existingUser, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IUserRL.ResetPassword(User existingUser, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }

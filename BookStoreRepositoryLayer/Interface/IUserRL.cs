@@ -9,5 +9,7 @@ namespace BookStoreRepositoryLayer.Interface
     {
         User Register(User userData);
         User Login(Login userData);
+        User ForgotPassword(string userName);
+        bool ResetPassword(User existingUser, string password);
     }
 }

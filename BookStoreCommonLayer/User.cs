@@ -23,6 +23,11 @@ namespace BookStoreCommonLayer
         public long MobileNumber { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public DateTime UpdatedDateTime { get; set; }
+
+        public static object FindFirst(Func<object, bool> p)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -49,7 +54,6 @@ namespace BookStoreCommonLayer
     {
         public string FullName { get; set; }
         public string Email { get; set; }
-
         public int UserId { get; set; }
     }
 }

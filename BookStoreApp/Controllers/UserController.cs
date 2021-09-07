@@ -1,5 +1,6 @@
 ﻿using BookStoreBusinessLayer.Interface;
 using BookStoreCommonLayer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +11,13 @@ using System.Threading.Tasks;
 
 namespace BookStoreApp.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
-    public class BookStoreController : ControllerBase
+    public class UserController : ControllerBase
     {
         private IUserBL userBL;
-        public BookStoreController(IUserBL userBL)
+        public UserController(IUserBL userBL)
         {
             this.userBL = userBL;
         }
@@ -49,9 +51,29 @@ namespace BookStoreApp.Controllers
                 var user = userBL.Login(userData);
                 if (user != null)
                 {
-                    return Ok(new { Success = false, Message = "Login Successfull", data = user });
+                    string token = userBL.GenerateToken(user.Email, user.UserId);
+                    return Ok(new { Success = false, Message = "Login Successfull", data = user, Token = token });
                 }
                 return Ok(new { Success = false, Message = "Login Failed" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("ForgotPassword")]
+        public ActionResult ForgotPassword(string email)
+        {
+            try
+            {
+                bool user = userBL.ForgotPassword(email);
+                if (user)
+                {
+                    return Ok(new { Success = true, Message = $"Password Reset Link has been sent to Registered Email: {email}" });
+                }
+                return NotFound("Invalid Email");
             }
             catch (Exception ex)
             {
