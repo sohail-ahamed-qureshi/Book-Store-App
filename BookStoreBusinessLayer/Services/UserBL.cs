@@ -214,9 +214,16 @@ namespace BookStoreBusinessLayer.Services
 
         }
 
-        public User ResetPassword(int userId, ResetPassword resetPassword)
+        public User ResetPassword(string email, ResetPassword resetPassword)
         {
-            throw new NotImplementedException();
+            if (resetPassword.NewPassword.Equals(resetPassword.ConfirmPassword))
+            {
+                User existingUser = userRL.GetUserDetails(email);
+                resetPassword.NewPassword = EncodePassword(resetPassword.NewPassword);
+                User user = userRL.ResetPassword(existingUser, resetPassword.NewPassword);
+                return user;
+            }
+            return null;
         }
     }
 }

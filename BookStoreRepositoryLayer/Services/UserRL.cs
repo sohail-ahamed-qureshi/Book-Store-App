@@ -65,7 +65,7 @@ namespace BookStoreRepositoryLayer.Services
             return existingUser;
         }
 
-        private User GetUserDetails(string email)
+        public User GetUserDetails(string email)
         {
             SqlConnection connection = new SqlConnection(connectionString);
             try
@@ -118,14 +118,36 @@ namespace BookStoreRepositoryLayer.Services
 
         }
 
-        public User ResetPassword(User existingUser, string password)
+        public User ResetPassword(User existingUser, string newPassword)
         {
-            throw new NotImplementedException();
+            existingUser.Password = newPassword;
+            existingUser.UpdatedDateTime = DateTime.Now;
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    string spName = "spResetPassword";
+                    SqlCommand command = new SqlCommand(spName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@email", existingUser.Email);
+                    command.Parameters.AddWithValue("@newPassword", existingUser.Password);
+                    command.Parameters.AddWithValue("@updatedDate", existingUser.UpdatedDateTime);
+                    connection.Open();
+                    int row = command.ExecuteNonQuery();
+                    return row == 1 ? existingUser : null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
         }
 
-        bool IUserRL.ResetPassword(User existingUser, string password)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

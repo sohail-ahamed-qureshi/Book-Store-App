@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BookStoreApp.Controllers
@@ -79,6 +80,35 @@ namespace BookStoreApp.Controllers
             {
                 return BadRequest(new { Success = false, Message = ex.Message });
             }
+        }
+
+        [HttpPut("resetpassword/{token}")]
+        public ActionResult ResetPassword([FromRoute] string token, [FromBody] ResetPassword reset)
+        {
+            if (reset != null && token != null)
+            {
+                //extracting userId from token
+                string email = GetEmailFromToken();
+                if (email != null)
+                {
+                    User updatedUser = userBL.ResetPassword(email, reset);
+                    if (updatedUser.UserId != 0)
+                    {
+                        return Ok(new { Success = true, Message = $"Reset Password Successfully at {updatedUser.UpdatedDateTime}", Data = updatedUser });
+                    }
+                }
+            }
+            return NotFound($"Invalid User Details");
+        }
+
+        private string GetEmailFromToken()
+        {
+            //getting user details from token
+            return User.FindFirst(user => user.Type == ClaimTypes.Email).Value;
+        }
+        private int GetUserIDFromToken()
+        {
+            return Convert.ToInt32(User.FindFirst(user => user.Type == "userId").Value);
         }
 
     }

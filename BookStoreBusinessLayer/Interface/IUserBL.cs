@@ -11,6 +11,6 @@ namespace BookStoreBusinessLayer.Interface
         UserResponse Login(Login userData);
         string GenerateToken(string userEmail, int userId);
         bool ForgotPassword(string email);
-        User ResetPassword(int userId, ResetPassword resetPassword);
+        User ResetPassword(string userId, ResetPassword resetPassword);
     }
 }
