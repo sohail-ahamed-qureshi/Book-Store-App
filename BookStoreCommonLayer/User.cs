@@ -34,7 +34,6 @@ namespace BookStoreCommonLayer
         [RegularExpression(@"^[a-zA-Z0-9]+([.][a-zA-Z0-9]+)?@[a-zA-Z0-9]+.[a-zA-Z]{2,4}([.][a-zA-Z]{2})?$", ErrorMessage = "Please enter a valid email address")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Password is required")]
-        [RegularExpression("^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]){1}[a-zA-Z0-9]{5,}", ErrorMessage = "Please enter a valid password")]
         public string Password { get; set; }
     }
     /// <summary>
@@ -50,5 +49,7 @@ namespace BookStoreCommonLayer
     {
         public string FullName { get; set; }
         public string Email { get; set; }
+
+        public int UserId { get; set; }
     }
 }

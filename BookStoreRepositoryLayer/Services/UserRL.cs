@@ -15,7 +15,7 @@ namespace BookStoreRepositoryLayer.Services
         public UserRL(IConfiguration configuration)
         {
             //Database connections
-             connectionString = configuration.GetSection("ConnectionStrings").GetSection("BookStoreDB").Value;
+            connectionString = configuration.GetSection("ConnectionStrings").GetSection("BookStoreDB").Value;
         }
         /// <summary>
         /// ability to register a new User
@@ -39,11 +39,51 @@ namespace BookStoreRepositoryLayer.Services
                     command.Parameters.AddWithValue("@createdDate", userData.CreatedDateTime);
                     command.Parameters.AddWithValue("@updatedDate", userData.UpdatedDateTime);
                     connection.Open();
-                    int  row =  command.ExecuteNonQuery();
+                    int row = command.ExecuteNonQuery();
                     return row == 1 ? userData : null;
                 }
             }
-            catch(Exception)
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+
+        public User Login(Login userData)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    string spName = "spGetUser";
+                    SqlCommand command = new SqlCommand(spName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    command.Parameters.AddWithValue("@email", userData.Email);
+                    SqlDataReader dataReader = command.ExecuteReader();
+                    User existingUser = new User();
+                    while (dataReader.Read())
+                    {
+                        existingUser.FullName = dataReader.GetString(0);
+                        existingUser.Email = dataReader.GetString(1);
+                        existingUser.Password = dataReader.GetString(2);
+                        existingUser.UserId = dataReader.GetInt32(3);
+                    }
+
+                    if (existingUser != null)
+                    {
+                        return existingUser;
+                    }
+                    return null;
+                }
+            }
+            catch (Exception)
             {
                 throw;
             }

@@ -8,5 +8,7 @@ namespace BookStoreBusinessLayer.Interface
     public interface IUserBL
     {
         User Register(User userData);
+        UserResponse Login(Login userData);
+
     }
 }

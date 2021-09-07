@@ -59,5 +59,28 @@ namespace BookStoreBusinessLayer.Services
             }
             return null;
         }
+
+        public UserResponse Login(Login userData)
+        {
+            if(userData != null)
+            {
+                User existingUser = userRL.Login(userData);
+                if(existingUser != null)
+                {
+                    existingUser.Password = DecodePassword(existingUser.Password);
+                    if (existingUser.Password.Equals(userData.Password))
+                    {
+                        UserResponse userResponse = new UserResponse
+                        {
+                            FullName = existingUser.FullName,
+                            Email = existingUser.Email,
+                            UserId = existingUser.UserId
+                        };
+                        return userResponse; 
+                    }
+                }
+            }
+            return null;
+        }
     }
 }

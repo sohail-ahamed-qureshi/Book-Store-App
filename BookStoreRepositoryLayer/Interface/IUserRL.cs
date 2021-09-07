@@ -8,5 +8,6 @@ namespace BookStoreRepositoryLayer.Interface
     public interface IUserRL
     {
         User Register(User userData);
+        User Login(Login userData);
     }
 }

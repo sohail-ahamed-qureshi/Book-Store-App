@@ -32,7 +32,26 @@ namespace BookStoreApp.Controllers
                 {
                     return Ok(new { Success = false, Message = "Registration Successfull", data = user });
                 }
-                return Ok(new { Success = false, Message = "Registration Failed" });
+                return Ok(new { Success = false, Message = "Registration Failed, User Already Exists" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("Login")]
+        public ActionResult LoginUser(Login userData)
+        {
+            try
+            {
+                var user = userBL.Login(userData);
+                if (user != null)
+                {
+                    return Ok(new { Success = false, Message = "Login Successfull", data = user });
+                }
+                return Ok(new { Success = false, Message = "Login Failed" });
             }
             catch (Exception ex)
             {
