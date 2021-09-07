@@ -28,7 +28,11 @@ namespace BookStoreApp.Controllers
             try
             {
                 var user = userBL.Register(userData);
-                return Ok(new { Success = false, Message = "Registration Successfull", data = user });
+                if (user != null)
+                {
+                    return Ok(new { Success = false, Message = "Registration Successfull", data = user });
+                }
+                return Ok(new { Success = false, Message = "Registration Failed" });
             }
             catch (Exception ex)
             {
