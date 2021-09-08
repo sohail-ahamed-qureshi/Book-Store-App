@@ -4,13 +4,20 @@
 	@password varchar(25),
 	@mobileNumber bigInt,
 	@createdDate date,
-	@updatedDate date
+	@updatedDate date,
+	@role varchar(25)
 AS
-Declare	@user int =0;
-Select @user = userId from UserAccount where email = @email;
-if(@user = 0)
+Declare	@id int =0;
+Select @id = userId from UserAccount where email = @email;
+if(@id = 0)
 Begin
 	Insert into UserAccount(fullName, email, password, mobileNumber, createdDate, updatedDate)
 	values (@fullName, @email, @password, @mobileNumber, @createdDate, @updatedDate);
+	declare @roleId int = 0;
+  select @roleId = roleId from Roles where roleName = @role;
+  declare @userId int = 0;
+  select @userId = userId from UserAccount where email = @email;
+  insert into UserRoles (userId, AdminId, roleId)
+  values(@userId, null, @roleId)
 End
 RETURN 0

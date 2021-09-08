@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utility = BookStoreBusinessLayer.Services.Utility;
 
 namespace BookStoreApp
 {
@@ -61,6 +62,9 @@ namespace BookStoreApp
             services.AddScoped<IUserBL, UserBL>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IUserRL, UserRL>();
+            services.AddScoped<IAdminBL, AdminBL>();
+            services.AddScoped<IAdminRL, AdminRL>();
+            services.AddScoped<IUtility, Utility>();
 
             //Swagger Configurations
             services.AddSwaggerGen(setup =>

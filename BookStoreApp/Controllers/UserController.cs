@@ -52,7 +52,7 @@ namespace BookStoreApp.Controllers
                 var user = userBL.Login(userData);
                 if (user != null)
                 {
-                    string token = userBL.GenerateToken(user.Email, user.UserId);
+                    string token = userBL.GenerateToken(user.Email, user.UserId, user.Role);
                     return Ok(new { Success = false, Message = "Login Successfull", data = user, Token = token });
                 }
                 return Ok(new { Success = false, Message = "Login Failed" });
@@ -98,7 +98,7 @@ namespace BookStoreApp.Controllers
                     }
                 }
             }
-            return NotFound($"Invalid User Details");
+            return NotFound(new { Success = false, Messgae = "Invalid User Details" });
         }
 
         private string GetEmailFromToken()
