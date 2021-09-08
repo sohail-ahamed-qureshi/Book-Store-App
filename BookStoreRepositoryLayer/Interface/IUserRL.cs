@@ -11,6 +11,5 @@ namespace BookStoreRepositoryLayer.Interface
         User Login(Login userData);
         User ForgotPassword(string userName);
         User ResetPassword(User existingUser, string password);
-        User GetUserDetails(string email);
     }
 }

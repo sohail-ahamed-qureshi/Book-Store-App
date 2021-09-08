@@ -11,7 +11,7 @@ namespace BookStoreRepositoryLayer.Services
 {
     public class UserRL : IUserRL
     {
-        string connectionString;
+        readonly string connectionString;
         public UserRL(IConfiguration configuration)
         {
             //Database connections
@@ -62,12 +62,6 @@ namespace BookStoreRepositoryLayer.Services
         /// <returns></returns>
         public User Login(Login userData)
         {
-            User existingUser = GetUserDetails(userData.Email);
-            return existingUser;
-        }
-
-        public User GetUserDetails(string email)
-        {
             SqlConnection connection = new SqlConnection(connectionString);
             try
             {
@@ -77,7 +71,7 @@ namespace BookStoreRepositoryLayer.Services
                     SqlCommand command = new SqlCommand(spName, connection);
                     command.CommandType = CommandType.StoredProcedure;
                     connection.Open();
-                    command.Parameters.AddWithValue("@email", email);
+                    command.Parameters.AddWithValue("@email", userData.Email);
                     SqlDataReader dataReader = command.ExecuteReader();
                     User existingUser = new User();
                     while (dataReader.Read())
@@ -108,14 +102,40 @@ namespace BookStoreRepositoryLayer.Services
 
         public User ForgotPassword(string email)
         {
+            SqlConnection connection = new SqlConnection(connectionString);
             try
             {
-                User existingUser = GetUserDetails(email);
-                return existingUser;
+                using (connection)
+                {
+                    string spName = "spGetUser";
+                    SqlCommand command = new SqlCommand(spName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    command.Parameters.AddWithValue("@email", email);
+                    SqlDataReader dataReader = command.ExecuteReader();
+                    User existingUser = new User();
+                    while (dataReader.Read())
+                    {
+                        existingUser.FullName = dataReader.GetString(0);
+                        existingUser.Email = dataReader.GetString(1);
+                        existingUser.Password = dataReader.GetString(2);
+                        existingUser.UserId = dataReader.GetInt32(3);
+                    }
+
+                    if (existingUser != null)
+                    {
+                        return existingUser;
+                    }
+                    return null;
+                }
             }
             catch (Exception)
             {
                 throw;
+            }
+            finally
+            {
+                connection.Close();
             }
 
         }

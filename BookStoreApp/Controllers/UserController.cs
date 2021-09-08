@@ -82,6 +82,7 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [Authorize(Roles =Role.User)]
         [HttpPut("resetpassword/{token}")]
         public ActionResult ResetPassword([FromRoute] string token, [FromBody] ResetPassword reset)
         {
