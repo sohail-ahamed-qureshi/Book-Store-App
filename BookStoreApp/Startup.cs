@@ -65,6 +65,8 @@ namespace BookStoreApp
             services.AddScoped<IAdminBL, AdminBL>();
             services.AddScoped<IAdminRL, AdminRL>();
             services.AddScoped<IUtility, Utility>();
+            services.AddScoped<IBookBL, BookBL>();
+            services.AddScoped<IBookRL, BookRL>();
 
             //Swagger Configurations
             services.AddSwaggerGen(setup =>
