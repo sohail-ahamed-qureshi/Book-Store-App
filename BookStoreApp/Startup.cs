@@ -67,6 +67,8 @@ namespace BookStoreApp
             services.AddScoped<IUtility, Utility>();
             services.AddScoped<IBookBL, BookBL>();
             services.AddScoped<IBookRL, BookRL>();
+            services.AddScoped<ICartBL, CartBL>();
+            services.AddScoped<ICartRL, CartRL>();
 
             //Swagger Configurations
             services.AddSwaggerGen(setup =>

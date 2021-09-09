@@ -107,10 +107,6 @@ namespace BookStoreApp.Controllers
             //getting user details from token
             return User.FindFirst(user => user.Type == ClaimTypes.Email).Value;
         }
-        private int GetUserIDFromToken()
-        {
-            return Convert.ToInt32(User.FindFirst(user => user.Type == "userId").Value);
-        }
-
+       
     }
 }
