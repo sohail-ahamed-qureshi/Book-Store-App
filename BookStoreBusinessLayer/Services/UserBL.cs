@@ -194,10 +194,13 @@ namespace BookStoreBusinessLayer.Services
         {
             if (resetPassword.NewPassword.Equals(resetPassword.ConfirmPassword))
             {
-                User existingUser = userRL.GetUserDetails(email);
-                resetPassword.NewPassword = utility.EncodePassword(resetPassword.NewPassword);
-                User user = userRL.ResetPassword(existingUser, resetPassword.NewPassword);
-                return user;
+                User existingUser = userRL.ForgotPassword(email);
+                if(existingUser != null)
+                {
+                    resetPassword.NewPassword = utility.EncodePassword(resetPassword.NewPassword);
+                    User user = userRL.ResetPassword(existingUser, resetPassword.NewPassword);
+                    return user;
+                }
             }
             return null;
         }

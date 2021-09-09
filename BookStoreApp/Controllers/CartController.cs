@@ -36,8 +36,62 @@ namespace BookStoreApp.Controllers
                 if (id != 0)
                 {
                     var cartitems = cartBL.GetAllItemsInCart(id);
+                    if( cartitems != null)
+                    {
+                        return Ok(new { success = true, message = $"you have {cartitems.Count} items in cart", data = cartitems });
+                    }
+                    return Ok(new { success = true, message = $"your cart is Empty" });
+                }
+                return BadRequest(new { success = false, message = "Invalid Details" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
 
-                    return Ok(new { success = true, message = $"you have {cartitems.Count} items in cart", data = cartitems });
+        [HttpPost]
+        public IActionResult AddItemToCart([FromBody] CartRequest reqData)
+        {
+            try
+            {
+                int id = GetUserIDFromToken();
+                if (id != 0)
+                {
+                    reqData.UserId = id;
+                    bool isAdded = cartBL.AddItemToCart(reqData);
+                    if (isAdded)
+                    {
+                        return Ok(new { success = true, message = $"Item added to card" });
+                    }
+                }
+                return BadRequest(new { success = false, message = "Invalid Details" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{bookId}")]
+        public IActionResult RemoveItemFromCart([FromRoute] int bookId)
+        {
+
+            try
+            {
+                int id = GetUserIDFromToken();
+                if (id != 0 && bookId != 0)
+                {
+                    CartRequest reqData = new CartRequest
+                    {
+                        BookId = bookId,
+                        UserId = id
+                    };
+                    bool isRemoved = cartBL.RemoveItemFromCart(reqData);
+                    if (isRemoved)
+                    {
+                        return Ok(new { success = true, message = $"Item removed from cart" });
+                    }
                 }
                 return BadRequest(new { success = false, message = "Invalid Details" });
             }

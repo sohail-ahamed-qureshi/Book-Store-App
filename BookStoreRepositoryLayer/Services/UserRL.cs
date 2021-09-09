@@ -42,7 +42,7 @@ namespace BookStoreRepositoryLayer.Services
                     command.Parameters.AddWithValue("@updatedDate", userData.UpdatedDateTime);
                     connection.Open();
                     int row = command.ExecuteNonQuery();
-                    return row == 1 ? userData : null;
+                    return row >= 1 ? userData : null;
                 }
             }
             catch (Exception)
@@ -73,18 +73,17 @@ namespace BookStoreRepositoryLayer.Services
                     connection.Open();
                     command.Parameters.AddWithValue("@email", userData.Email);
                     SqlDataReader dataReader = command.ExecuteReader();
-                    User existingUser = new User();
-                    while (dataReader.Read())
+                    if (dataReader.HasRows)
                     {
-                        existingUser.FullName = dataReader.GetString(0);
-                        existingUser.Email = dataReader.GetString(1);
-                        existingUser.Password = dataReader.GetString(2);
-                        existingUser.UserId = dataReader.GetInt32(3);
-                        existingUser.Role = dataReader.GetString(4);
-                    }
-
-                    if (existingUser != null)
-                    {
+                        User existingUser = new User();
+                        while (dataReader.Read())
+                        {
+                            existingUser.FullName = dataReader.GetString(0);
+                            existingUser.Email = dataReader.GetString(1);
+                            existingUser.Password = dataReader.GetString(2);
+                            existingUser.UserId = dataReader.GetInt32(3);
+                            existingUser.Role = dataReader.GetString(4);
+                        }
                         return existingUser;
                     }
                     return null;
@@ -113,17 +112,16 @@ namespace BookStoreRepositoryLayer.Services
                     connection.Open();
                     command.Parameters.AddWithValue("@email", email);
                     SqlDataReader dataReader = command.ExecuteReader();
-                    User existingUser = new User();
-                    while (dataReader.Read())
+                    if (dataReader.HasRows)
                     {
-                        existingUser.FullName = dataReader.GetString(0);
-                        existingUser.Email = dataReader.GetString(1);
-                        existingUser.Password = dataReader.GetString(2);
-                        existingUser.UserId = dataReader.GetInt32(3);
-                    }
-
-                    if (existingUser != null)
-                    {
+                        User existingUser = new User();
+                        while (dataReader.Read())
+                        {
+                            existingUser.FullName = dataReader.GetString(0);
+                            existingUser.Email = dataReader.GetString(1);
+                            existingUser.Password = dataReader.GetString(2);
+                            existingUser.UserId = dataReader.GetInt32(3);
+                        }
                         return existingUser;
                     }
                     return null;
@@ -157,7 +155,7 @@ namespace BookStoreRepositoryLayer.Services
                     command.Parameters.AddWithValue("@updatedDate", existingUser.UpdatedDateTime);
                     connection.Open();
                     int row = command.ExecuteNonQuery();
-                    return row == 1 ? existingUser : null;
+                    return row >= 1 ? existingUser : null;
                 }
             }
             catch (Exception)

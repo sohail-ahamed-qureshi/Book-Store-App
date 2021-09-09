@@ -64,18 +64,18 @@ namespace BookStoreRepositoryLayer.Services
                     connection.Open();
                     command.Parameters.AddWithValue("@email", email);
                     SqlDataReader dataReader = command.ExecuteReader();
-                    User existingUser = new User();
-                    while (dataReader.Read())
+                    
+                    if (dataReader.HasRows)
                     {
-                        existingUser.FullName = dataReader.GetString(0);
-                        existingUser.Email = dataReader.GetString(1);
-                        existingUser.Password = dataReader.GetString(2);
-                        existingUser.UserId = dataReader.GetInt32(3);
-                        existingUser.Role = dataReader.GetString(4);
-                    }
-
-                    if (existingUser != null)
-                    {
+                        User existingUser = new User();
+                        while (dataReader.Read())
+                        {
+                            existingUser.FullName = dataReader.GetString(0);
+                            existingUser.Email = dataReader.GetString(1);
+                            existingUser.Password = dataReader.GetString(2);
+                            existingUser.UserId = dataReader.GetInt32(3);
+                            existingUser.Role = dataReader.GetString(4);
+                        }
                         return existingUser;
                     }
                     return null;
