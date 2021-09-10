@@ -36,7 +36,7 @@ namespace BookStoreApp.Controllers
                 if (id != 0)
                 {
                     var cartitems = cartBL.GetAllItemsInCart(id);
-                    if( cartitems != null)
+                    if (cartitems != null)
                     {
                         return Ok(new { success = true, message = $"you have {cartitems.Count} items in cart", data = cartitems });
                     }
@@ -91,6 +91,34 @@ namespace BookStoreApp.Controllers
                     if (isRemoved)
                     {
                         return Ok(new { success = true, message = $"Item removed from cart" });
+                    }
+                }
+                return BadRequest(new { success = false, message = "Invalid Details" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        public IActionResult IncreaseItemInCart([FromBody] QuantityRequest requestData)
+        {
+            try
+            {
+                int id = GetUserIDFromToken();
+                if (id != 0)
+                {
+                    CartRequest reqData = new CartRequest
+                    {
+                        BookId = requestData.BookId,
+                        Quantity = requestData.Quantity,
+                        UserId = id
+                    };
+                    CartResponse cartResponse = cartBL.IncreaseItemCart(reqData);
+                    if (cartResponse != null)
+                    {
+                        return Ok(new { success = true, message = $"You have added {cartResponse.BookName}'s Quantity to {cartResponse.Quantity}" });
                     }
                 }
                 return BadRequest(new { success = false, message = "Invalid Details" });

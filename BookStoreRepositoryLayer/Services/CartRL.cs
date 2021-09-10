@@ -117,5 +117,51 @@ namespace BookStoreRepositoryLayer.Services
                 connection.Close();
             }
         }
+
+        public CartResponse IncreaseItemCart(CartRequest reqData)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    string spName = "spIncreaseQuantityInCart";
+                    SqlCommand command = new SqlCommand(spName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    command.Parameters.AddWithValue("@userId", reqData.UserId);
+                    command.Parameters.AddWithValue("@bookId", reqData.BookId);
+                    command.Parameters.AddWithValue("@quantity", reqData.Quantity);
+                    SqlDataReader dataReader = command.ExecuteReader();
+                    if (dataReader.HasRows)
+                    {
+                        CartResponse cart = new CartResponse();
+                        while (dataReader.Read())
+                        {
+                             cart = new CartResponse
+                            {
+                                BookId = dataReader.GetInt32(0),
+                                FullName = dataReader.GetString(1),
+                                BookName = dataReader.GetString(2) ?? string.Empty,
+                                Author = dataReader.GetString(3) ?? string.Empty,
+                                Description = dataReader.GetString(4) ?? string.Empty,
+                                Price = dataReader.GetDecimal(5),
+                                Quantity = dataReader.GetInt32(6)
+                            };
+                        }
+                        return cart;
+                    }
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
     }
 }

@@ -38,10 +38,20 @@ namespace BookStoreBusinessLayer.Services
             if (userId != 0)
             {
                 var cartItems = cartRL.GetAllItemsInCart(userId);
-                if( cartItems != null)
+                if (cartItems != null)
                 {
                     return cartItems;
                 }
+            }
+            return null;
+        }
+
+        public CartResponse IncreaseItemCart(CartRequest reqData)
+        {
+            if (reqData != null)
+            {
+                CartResponse cartItem = cartRL.IncreaseItemCart(reqData);
+                return cartItem;
             }
             return null;
         }

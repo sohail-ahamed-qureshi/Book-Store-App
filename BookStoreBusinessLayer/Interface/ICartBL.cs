@@ -11,5 +11,7 @@ namespace BookStoreBusinessLayer.Interface
 
         bool AddItemToCart(CartRequest reqData);
         bool RemoveItemFromCart(CartRequest reqData);
+
+        CartResponse IncreaseItemCart(CartRequest reqData);
     }
 }

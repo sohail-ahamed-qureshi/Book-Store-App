@@ -10,5 +10,7 @@ namespace BookStoreRepositoryLayer.Interface
         List<CartResponse> GetAllItemsInCart(int userId);
         bool AddItemToCart(CartRequest reqData);
         bool RemoveItemFromCart(CartRequest reqData);
+
+        CartResponse IncreaseItemCart(CartRequest reqData);
     }
 }

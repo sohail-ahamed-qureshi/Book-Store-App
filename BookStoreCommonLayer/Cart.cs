@@ -6,7 +6,7 @@ namespace BookStoreCommonLayer
 {
     public class Cart
     {
-        
+
     }
 
     public class CartRequest
@@ -15,8 +15,16 @@ namespace BookStoreCommonLayer
         public int UserId { get; set; }
         public int Quantity { get; set; }
     }
+
+    public class QuantityRequest
+    {
+        public int BookId { get; set; }
+        public int Quantity { get; set; }
+    }
+
     public class CartResponse
     {
+        public int BookId { get; set; }
         public string FullName { get; set; }
         public string BookName { get; set; }
         public string Author { get; set; }
