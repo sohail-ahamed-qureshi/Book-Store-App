@@ -27,7 +27,7 @@ namespace BookStoreBusinessLayer.Services
                     FullName = userData.FullName,
                     Email = userData.Email,
                     Password = userData.Password,
-                    Role = "Admin",
+                    Role = Role.Admin,
                     MobileNumber = userData.MobileNumber,
                     CreatedDateTime = DateTime.Now,
                     UpdatedDateTime = DateTime.Now

@@ -37,7 +37,7 @@ namespace BookStoreRepositoryLayer.Services
                     command.Parameters.AddWithValue("@email", userData.Email);
                     command.Parameters.AddWithValue("@password", userData.Password);
                     command.Parameters.AddWithValue("@mobileNumber", userData.MobileNumber);
-                    command.Parameters.AddWithValue("@role", "User");
+                    command.Parameters.AddWithValue("@role", Role.User);
                     command.Parameters.AddWithValue("@createdDate", userData.CreatedDateTime);
                     command.Parameters.AddWithValue("@updatedDate", userData.UpdatedDateTime);
                     connection.Open();

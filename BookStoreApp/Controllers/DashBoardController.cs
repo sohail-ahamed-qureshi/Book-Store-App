@@ -12,10 +12,10 @@ namespace BookStoreApp.Controllers
     
     [Route("api/[controller]")]
     [ApiController]
-    public class HomeController : ControllerBase
+    public class DashBoardController : ControllerBase
     {
         private readonly IBookBL bookBL;
-        public HomeController(IBookBL bookBL)
+        public DashBoardController(IBookBL bookBL)
         {
             this.bookBL = bookBL;
         }

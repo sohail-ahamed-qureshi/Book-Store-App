@@ -63,7 +63,7 @@ namespace BookStoreBusinessLayer.Services
                         new Claim("userId", userId.ToString(), ClaimValueTypes.Integer),
                         new Claim(ClaimTypes.Role , role),
                     }),
-                Expires = DateTime.UtcNow.AddMinutes(60),
+                Expires = DateTime.UtcNow.AddMinutes(120),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescpritor);

@@ -132,7 +132,7 @@ namespace BookStoreApp
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fundoo API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book Store App");
 
                 // To serve SwaggerUI at application's root (http://localhost:<port>/) page, set the RoutePrefix property to an empty string
                 c.RoutePrefix = string.Empty;

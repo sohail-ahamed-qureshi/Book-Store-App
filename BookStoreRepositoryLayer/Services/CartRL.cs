@@ -11,7 +11,7 @@ namespace BookStoreRepositoryLayer.Services
 {
     public class CartRL : ICartRL
     {
-        private string connectionString;
+        private readonly string connectionString;
         public CartRL(IConfiguration configuration)
         {
             connectionString = configuration.GetSection("ConnectionStrings").GetSection("BookStoreDB").Value;
@@ -60,7 +60,7 @@ namespace BookStoreRepositoryLayer.Services
                     command.Parameters.AddWithValue("@bookId", reqData.BookId);
                     command.Parameters.AddWithValue("@quantity", reqData.Quantity);
                     int row = command.ExecuteNonQuery();
-                    return row == 1; 
+                    return row == 1;
                 }
             }
             catch (Exception)
@@ -138,7 +138,7 @@ namespace BookStoreRepositoryLayer.Services
                         CartResponse cart = new CartResponse();
                         while (dataReader.Read())
                         {
-                             cart = new CartResponse
+                            cart = new CartResponse
                             {
                                 BookId = dataReader.GetInt32(0),
                                 FullName = dataReader.GetString(1),
