@@ -41,5 +41,18 @@ namespace BookStoreBusinessLayer.Services
             }
             return null;
         }
+
+        public CartResponse RemoveItemFromWishlist(WishlistRequest reqData)
+        {
+            if (reqData != null)
+            {
+                var wishlistItem = wishListRL.RemoveItemFromWishlist(reqData);
+                if (wishlistItem != null)
+                {
+                    return wishlistItem;
+                }
+            }
+            return null;
+        }
     }
 }

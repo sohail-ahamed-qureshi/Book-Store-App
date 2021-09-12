@@ -103,5 +103,48 @@ namespace BookStoreRepositoryLayer.Services
                 connection.Close();
             }
         }
+
+        public CartResponse RemoveItemFromWishlist(WishlistRequest reqData)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    string spName = "spRemoveItemFromWishlist";
+                    SqlCommand command = new SqlCommand(spName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    command.Parameters.AddWithValue("@userId", reqData.UserId);
+                    command.Parameters.AddWithValue("@bookId", reqData.BookId);
+                    SqlDataReader dataReader = command.ExecuteReader();
+                    if (dataReader.HasRows)
+                    {
+                        CartResponse wishListItem = new CartResponse();
+                        while (dataReader.Read())
+                        {
+                            wishListItem = new CartResponse
+                            {
+                                BookId = dataReader.GetInt32(0),
+                                FullName = dataReader.GetString(1),
+                                BookName = dataReader.GetString(2) == null ? string.Empty : dataReader.GetString(2),
+                                Author = dataReader.GetString(3) == null ? string.Empty : dataReader.GetString(3),
+                                Price = dataReader.GetDecimal(4)
+                            };
+                        }
+                        return wishListItem;
+                    }
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
     }
 }

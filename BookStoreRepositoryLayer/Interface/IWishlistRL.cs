@@ -9,5 +9,6 @@ namespace BookStoreRepositoryLayer.Interface
     {
         List<CartResponse> GetAllItemsInWishList(int userId);
         CartResponse AddItemToWishlist(WishlistRequest reqData);
+        CartResponse RemoveItemFromWishlist(WishlistRequest reqData);
     }
 }
