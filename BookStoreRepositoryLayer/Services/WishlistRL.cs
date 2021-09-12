@@ -17,6 +17,50 @@ namespace BookStoreRepositoryLayer.Services
             //Database connections
             connectionString = configuration.GetSection("ConnectionStrings").GetSection("BookStoreDB").Value;
         }
+
+        public CartResponse AddItemToWishlist(WishlistRequest reqData)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    string spName = "spAddItemtoWishlist";
+                    SqlCommand command = new SqlCommand(spName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    command.Parameters.AddWithValue("@userId", reqData.UserId);
+                    command.Parameters.AddWithValue("@bookId", reqData.BookId);
+                    SqlDataReader dataReader = command.ExecuteReader();
+                    if (dataReader.HasRows)
+                    {
+                        CartResponse wishListItem = new CartResponse();
+                        while (dataReader.Read())
+                        {
+                            wishListItem = new CartResponse
+                            {
+                                BookId = dataReader.GetInt32(0),
+                                FullName = dataReader.GetString(1),
+                                BookName = dataReader.GetString(2) == null ? string.Empty : dataReader.GetString(2),
+                                Author = dataReader.GetString(3) == null ? string.Empty : dataReader.GetString(3),
+                                Price = dataReader.GetDecimal(4)
+                            };
+                        }
+                        return wishListItem;
+                    }
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
         public List<CartResponse> GetAllItemsInWishList(int userId)
         {
             SqlConnection connection = new SqlConnection(connectionString);
@@ -41,9 +85,7 @@ namespace BookStoreRepositoryLayer.Services
                                 FullName = dataReader.GetString(1),
                                 BookName = dataReader.GetString(2) == null ? string.Empty : dataReader.GetString(2),
                                 Author = dataReader.GetString(3) == null ? string.Empty : dataReader.GetString(3),
-                                Description = dataReader.GetString(4) == null ? string.Empty : dataReader.GetString(4),
-                                Price = dataReader.GetDecimal(5),
-                                Quantity = dataReader.GetInt32(6)
+                                Price = dataReader.GetDecimal(4)
                             };
                             cartItems.Add(cart);
                         }

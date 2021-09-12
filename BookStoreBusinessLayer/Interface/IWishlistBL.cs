@@ -8,5 +8,6 @@ namespace BookStoreBusinessLayer.Interface
     public interface IWishlistBL
     {
         List<CartResponse> GetAllItemsInWishList(int userId);
+        CartResponse AddItemToWishlist(WishlistRequest reqData);
     }
 }

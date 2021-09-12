@@ -50,5 +50,34 @@ namespace BookStoreApp.Controllers
         }
 
 
+        [HttpPost]
+        public IActionResult AddItemtoWishlist(int bookId)
+        {
+            try
+            {
+                int userId = GetUserIDFromToken();
+                if (userId != 0)
+                {
+                    WishlistRequest reqData = new WishlistRequest
+                    {
+                        BookId = bookId,
+                        UserId = userId
+                    };
+                    var wishlistItem = wishlistBL.AddItemToWishlist(reqData);      
+                    if (wishlistItem != null)
+                    {
+                        return Ok(new { Success = true, Message = $"Item added to wishlist", data = wishlistItem });
+                    }
+                    return BadRequest(new { Success = false, Message = "Item add failed" });
+                }
+                return BadRequest(new { Success = false, Message = "Invalid Details" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
+        }
+
+
     }
 }

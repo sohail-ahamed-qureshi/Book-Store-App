@@ -15,12 +15,26 @@ namespace BookStoreBusinessLayer.Services
             this.wishListRL = wishListRL;
         }
 
+        public CartResponse AddItemToWishlist(WishlistRequest reqData)
+        {
+            if (reqData != null)
+            {
+                var wishlistItem = wishListRL.AddItemToWishlist(reqData);
+                if (wishlistItem != null)
+                {
+                    return wishlistItem;
+                }
+            }
+            return null;
+
+        }
+
         public List<CartResponse> GetAllItemsInWishList(int userId)
         {
-            if(userId != 0)
+            if (userId != 0)
             {
                 var wishListItems = wishListRL.GetAllItemsInWishList(userId);
-                if(wishListItems != null)
+                if (wishListItems != null)
                 {
                     return wishListItems;
                 }
