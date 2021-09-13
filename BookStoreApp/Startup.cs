@@ -73,6 +73,8 @@ namespace BookStoreApp
             services.AddScoped<IWishlistRL, WishlistRL>();
             services.AddScoped<IAddressBL, AddressBL>();
             services.AddScoped<IAddressRL, AddressRL>();
+            services.AddScoped<IOrderBL, OrderBL>();
+            services.AddScoped<IOrderRL, OrderRL>();
 
             //Swagger Configurations
             services.AddSwaggerGen(setup =>
