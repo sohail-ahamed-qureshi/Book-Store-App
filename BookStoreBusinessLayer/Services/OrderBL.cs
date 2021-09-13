@@ -10,9 +10,11 @@ namespace BookStoreBusinessLayer.Services
     public class OrderBL : IOrderBL
     {
         private readonly IOrderRL orderRL;
-        public OrderBL(IOrderRL orderRL)
+        private readonly IEmailSender emailSender;
+        public OrderBL(IOrderRL orderRL, IEmailSender emailSender)
         {
             this.orderRL = orderRL;
+            this.emailSender = emailSender;
         }
 
 
@@ -24,6 +26,8 @@ namespace BookStoreBusinessLayer.Services
                 if (orderResponse != null)
                 {
                     //on successfull order placement send invoice to user email
+                    var emailMessage = new SuccessMail(new string[] { "sohailqureshi82@gmail.com" }, $"Order Places Successfully!!!, Your order id: #{orderResponse.OrderId}",orderResponse);
+                    emailSender.SendSuccessEmail(emailMessage);
                     return orderResponse;
                 }
             }

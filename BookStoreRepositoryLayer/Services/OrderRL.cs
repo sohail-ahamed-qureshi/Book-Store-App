@@ -24,7 +24,7 @@ namespace BookStoreRepositoryLayer.Services
             {
                 using (connection)
                 {
-                    string spName = "spAddAddress";
+                    string spName = "spPlaceOrder";
                     SqlCommand command = new SqlCommand(spName, connection);
                     command.CommandType = CommandType.StoredProcedure;
                     connection.Open();
@@ -48,10 +48,9 @@ namespace BookStoreRepositoryLayer.Services
                                 Price = dataReader.GetDecimal(6),
                                 AddressId = dataReader.GetInt32(7),
                                 Address = dataReader.GetString(8),
-                                CartId = dataReader.GetInt32(9),
-                                Quantity = dataReader.GetInt32(10),
-                                OrderDate = dataReader.GetDateTime(11),
-                                TotalPrice = dataReader.GetDecimal(12)
+                                Quantity = dataReader.GetInt32(9),
+                                OrderDate = dataReader.GetDateTime(10),
+                                TotalPrice = dataReader.GetDecimal(11)
                             };
                         }
                         return orderResponse;

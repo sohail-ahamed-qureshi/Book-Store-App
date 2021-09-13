@@ -8,5 +8,6 @@ namespace BookStoreRepositoryLayer.Interface
     public interface IEmailSender
     {
         void SendEmail(Mail mail);
+        void SendSuccessEmail(SuccessMail mail);
     }
 }
