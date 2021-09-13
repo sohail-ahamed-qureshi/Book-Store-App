@@ -18,6 +18,57 @@ namespace BookStoreRepositoryLayer.Services
             connectionString = configuration.GetSection("ConnectionStrings").GetSection("BookStoreDB").Value;
         }
 
+        public AddressResponse AddAddress(AddressRequest reqData, int userId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    string spName = "spAddAddress";
+                    SqlCommand command = new SqlCommand(spName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@address", reqData.Addresses);
+                    command.Parameters.AddWithValue("@mobileNumber", reqData.MobileNumber);
+                    command.Parameters.AddWithValue("@city", reqData.City);
+                    command.Parameters.AddWithValue("@state", reqData.State);
+                    command.Parameters.AddWithValue("@typeOf", reqData.typeOf);
+
+                    SqlDataReader dataReader = command.ExecuteReader();
+                    if (dataReader.HasRows)
+                    {
+                        AddressResponse addressResponse = new AddressResponse();
+                        while (dataReader.Read())
+                        {
+                             addressResponse = new AddressResponse
+                            {
+                                AddressId = dataReader.GetInt32(0),
+                                UserId = dataReader.GetInt32(1),
+                                FullName= dataReader.GetString(2),
+                                MobileNumber= dataReader.GetInt64(3),
+                                Addresses= dataReader.GetString(4),
+                                City=dataReader.GetString(5),
+                                State=dataReader.GetString(6),
+                                typeOf=dataReader.GetString(7)
+                            };
+                        }
+                        return addressResponse;
+                    }
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
         public IEnumerable<AddressResponse> GetAddresses(int userId)
         {
             SqlConnection connection = new SqlConnection(connectionString);
@@ -25,7 +76,7 @@ namespace BookStoreRepositoryLayer.Services
             {
                 using (connection)
                 {
-                    string spName = "spGetAddresses";
+                    string spName = "spGetAddress";
                     SqlCommand command = new SqlCommand(spName, connection);
                     command.CommandType = CommandType.StoredProcedure;
                     connection.Open();

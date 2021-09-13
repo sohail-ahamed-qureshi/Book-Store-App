@@ -38,7 +38,7 @@ namespace BookStoreApp.Controllers
                    var addressList = addressBL.GetAddresses(userId);
                     if(addressList != null)
                     {
-                        return Ok(new { Success = true, Message = $"You have {addressList.Count} addresses", data = addressList })
+                        return Ok(new { Success = true, Message = $"You have {addressList.Count()} addresses", data = addressList });
                     }
                     return BadRequest(new { Success = false, Message = "Address list is empty" });
                 }
@@ -47,6 +47,29 @@ namespace BookStoreApp.Controllers
             catch(Exception ex)
             {
                 return BadRequest(new {Success = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult AddAddresses([FromBody]AddressRequest reqData)
+        {
+            try
+            {
+                int userId = GetUserIDFromToken();
+                if (userId != 0)
+                {
+                    var address = addressBL.AddAddress(reqData, userId);
+                    if (address != null)
+                    {
+                        return Ok(new { Success = true, Message = $"Address added Successfully", data = address });
+                    }
+                    return BadRequest(new { Success = false, Message = "Address add failed" });
+                }
+                return BadRequest(new { Success = false, Message = "Invalid Details" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
             }
         }
     }

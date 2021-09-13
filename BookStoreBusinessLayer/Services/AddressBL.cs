@@ -27,5 +27,14 @@ namespace BookStoreBusinessLayer.Services
             }
             return null;
         }
+
+        public AddressResponse AddAddress(AddressRequest reqData, int userId)
+        {
+            if(reqData != null || userId != 0)
+            {
+                return addressRL.AddAddress(reqData, userId);
+            }
+            return null;
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace BookStoreRepositoryLayer.Interface
     public interface IAddressRL
     {
         IEnumerable<AddressResponse> GetAddresses(int userId);
+        AddressResponse AddAddress(AddressRequest reqData, int userId);
     }
 }
