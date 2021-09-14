@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using BookStoreCommonLayer;
 using BookStoreRepositoryLayer.Interface;
+using System.Threading.Tasks;
 
 namespace BookStoreBusinessLayer.Services
 {
@@ -29,6 +30,19 @@ namespace BookStoreBusinessLayer.Services
                     var emailMessage = new SuccessMail(new string[] { "sohailqureshi82@gmail.com" }, $"Order Places Successfully!!!, Your order id: #{orderResponse.OrderId}",orderResponse);
                     emailSender.SendSuccessEmail(emailMessage);
                     return orderResponse;
+                }
+            }
+            return null;
+        }
+
+        public async Task<IEnumerable<OrderResponse>> MyOrders(int userId)
+        {
+            if(userId != 0)
+            {
+                var orderList = await orderRL.MyOrders(userId);
+                if(orderList != null)
+                {
+                    return orderList;
                 }
             }
             return null;

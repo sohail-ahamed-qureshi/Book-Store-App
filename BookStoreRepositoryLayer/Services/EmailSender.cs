@@ -107,25 +107,25 @@ namespace BookStoreRepositoryLayer.Services
                 $"<div style='text-align: center'>" +
                     $"<table style='text-align: center; font-family: arial, sans-serif;border-collapse: collapse;border:1px solid black ; width: 100%' >" +
                         $"<tr style='border:1px solid black ' >" +
-                            $"<th style='padding: 8px' >Order Id</th>" +
-                            $"<th style='padding: 8px' >Order Date</th>" +
-                            $"<th style='padding: 8px'>Book Name</th>" +
-                            $"<th style='padding: 8px' >Quantity</th>" +
-                            $"<th style='padding: 8px' >Price</th>" +
+                            $"<th style='padding: 8px; border:1px solid black  ' >Order Id</th>" +
+                            $"<th style='padding: 8px;border:1px solid black ' >Order Date</th>" +
+                            $"<th style='padding : 8px;border:1px solid black'>Book Name</th>" +
+                            $"<th style='padding: 8px;border:1px solid black ' >Quantity</th>" +
+                            $"<th style='padding : 8px;border:1px solid black' >Price</th>" +
                         $"</tr>" +
                         $"<tr  style='border:1px solid black ' >" +
-                            $"<td style='padding: 8px' >{mail.Content.OrderId}</td>" +
-                            $"<td style='padding: 8px' >{mail.Content.OrderDate}</td>" +
-                            $"<td style='padding: 8px' >{mail.Content.BookName}</td>" +
-                            $"<td style='padding: 8px' >{mail.Content.Quantity}</td>" +
-                            $"<td style='padding: 8px' >{mail.Content.Price}</td>" +
+                            $"<td style='padding: 8px;border:1px solid black ' >#{mail.Content.OrderId}</td>" +
+                            $"<td style='padding: 8px;border:1px solid black ' >{mail.Content.OrderDate}</td>" +
+                            $"<td style='padding: 8px;border:1px solid black ' >{mail.Content.BookName}</td>" +
+                            $"<td style='padding: 8px;border:1px solid black ' >{mail.Content.Quantity}</td>" +
+                            $"<td style='padding: 8px;border:1px solid black ' >{mail.Content.Price}</td>" +
                         $"</tr>" +
                          $"<tr  style='border:1px solid black ' >" +
-                            $"<td style='padding: 8px' ></td>" +
-                            $"<td style='padding: 8px' ></td>" +
-                            $"<td style='padding: 8px' ></td>" +
-                            $"<td style='font-weight: bold; padding: 8px;' >Total Price in Rs</td>" +
-                            $"<td style='font-weight: bold;padding: 8px;' >{mail.Content.TotalPrice}</td>" +
+                            $"<td style='padding: 8px;border:1px solid black ' ></td>" +
+                            $"<td style='padding: 8px;border:1px solid black ' ></td>" +
+                            $"<td style='padding: 8px;border:1px solid black ' ></td>" +
+                            $"<td style='font-weight: bold; padding: 8px;border:1px solid black ' >Total Price in Rs</td>" +
+                            $"<td style='font-weight : bold;padding: 8px;border:1px solid black' >{mail.Content.TotalPrice}</td>" +
                         $"</tr>" +
                     $"</table>" +
                 $"</div>")

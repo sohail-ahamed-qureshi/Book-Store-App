@@ -22,17 +22,22 @@ namespace BookStoreApp.Controllers
             this.orderBL = orderBL;
         }
 
-        private int GetUserIDFromToken()
+        private async Task<int> GetUserIDFromToken()
         {
-            return Convert.ToInt32(User.FindFirst(user => user.Type == "userId").Value);
+            int userId =0;
+            await Task.Run(() =>
+            {
+               userId = Convert.ToInt32(User.FindFirst(user => user.Type == "userId").Value);
+            }); 
+            return userId;
         }
 
         [HttpPost]
-        public IActionResult PlaceOrder(OrderRequest reqData)
+        public async Task<IActionResult> PlaceOrder(OrderRequest reqData)
         {
             try
             {
-                int id = GetUserIDFromToken();
+                int id = await GetUserIDFromToken();
                 if (id != 0)
                 {
                     var orderPlaced = orderBL.PlaceOrder(reqData);
@@ -41,6 +46,29 @@ namespace BookStoreApp.Controllers
                         return Ok(new { success = true, message = $"hurray!!! your order is confirmed the order id is #{orderPlaced.OrderId} save the order id for further communication..", data = orderPlaced });
                     }
                     return BadRequest(new { success = false, message = "Order placed failed." });
+                }
+                return BadRequest(new { success = false, message = "Invalid Details" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyOrders()
+        {
+            try
+            {
+                int id = await GetUserIDFromToken();
+                if (id != 0)
+                {
+                    var ordersList =await orderBL.MyOrders(id);
+                    if (ordersList != null)
+                    {
+                        return Ok(new { success = true, message = $"You have {ordersList.Count()} ordered items", data = ordersList });
+                    }
+                    return BadRequest(new { success = false, message = "Order list is empty." });
                 }
                 return BadRequest(new { success = false, message = "Invalid Details" });
             }
