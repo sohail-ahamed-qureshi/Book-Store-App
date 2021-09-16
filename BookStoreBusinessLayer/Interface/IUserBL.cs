@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BookStoreBusinessLayer.Interface
 {
@@ -12,5 +13,7 @@ namespace BookStoreBusinessLayer.Interface
         string GenerateToken(string userEmail, int userId,  string role);
         bool ForgotPassword(string email);
         User ResetPassword(string userId, ResetPassword resetPassword);
+
+        Task<User> GetDetails(string email);
     }
 }

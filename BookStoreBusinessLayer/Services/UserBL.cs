@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BookStoreBusinessLayer.Services
 {
@@ -21,7 +22,7 @@ namespace BookStoreBusinessLayer.Services
         private string secretKey;
         private readonly IEmailSender emailSender;
         MessageQueue messageQueue = null;
-        public UserBL(IUtility utility,IUserRL userRL, IConfiguration configutration, IEmailSender emailSender)
+        public UserBL(IUtility utility, IUserRL userRL, IConfiguration configutration, IEmailSender emailSender)
         {
             this.utility = utility;
             this.userRL = userRL;
@@ -29,7 +30,7 @@ namespace BookStoreBusinessLayer.Services
             this.emailSender = emailSender;
         }
 
-       
+
 
         /// <summary>
         /// ability to check for data and encryption
@@ -195,7 +196,7 @@ namespace BookStoreBusinessLayer.Services
             if (resetPassword.NewPassword.Equals(resetPassword.ConfirmPassword))
             {
                 User existingUser = userRL.ForgotPassword(email);
-                if(existingUser != null)
+                if (existingUser != null)
                 {
                     resetPassword.NewPassword = utility.EncodePassword(resetPassword.NewPassword);
                     User user = userRL.ResetPassword(existingUser, resetPassword.NewPassword);
@@ -203,6 +204,11 @@ namespace BookStoreBusinessLayer.Services
                 }
             }
             return null;
+        }
+
+        public async Task<User> GetDetails(string email)
+        {
+            return await userRL.GetDetails(email);
         }
     }
 }

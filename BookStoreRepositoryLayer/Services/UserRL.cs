@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BookStoreRepositoryLayer.Services
 {
@@ -38,8 +39,6 @@ namespace BookStoreRepositoryLayer.Services
                     command.Parameters.AddWithValue("@password", userData.Password);
                     command.Parameters.AddWithValue("@mobileNumber", userData.MobileNumber);
                     command.Parameters.AddWithValue("@role", Role.User);
-                    command.Parameters.AddWithValue("@createdDate", userData.CreatedDateTime);
-                    command.Parameters.AddWithValue("@updatedDate", userData.UpdatedDateTime);
                     connection.Open();
                     int row = command.ExecuteNonQuery();
                     return row >= 1 ? userData : null;
@@ -168,6 +167,19 @@ namespace BookStoreRepositoryLayer.Services
             }
         }
 
+        public async Task<User> GetDetails(string email)
+        {
 
+            User user = new User();
+            await Task.Run(() =>
+            {
+                Login login = new Login
+                {
+                    Email = email
+                };
+                user = Login(login);
+            });
+            return user;
+        }
     }
 }

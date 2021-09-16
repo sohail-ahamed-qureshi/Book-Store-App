@@ -109,6 +109,15 @@ namespace BookStoreApp
             var emailConfigure = Configuration.GetSection("EmailSettings")
                     .Get<EmailConfiguration>();
             services.AddSingleton(emailConfigure);
+
+            //adding cross origin resource sharing configuration
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -122,6 +131,7 @@ namespace BookStoreApp
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthorization();
 

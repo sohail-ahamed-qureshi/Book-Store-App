@@ -2,6 +2,7 @@
 using BookStoreCommonLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace BookStoreApp.Controllers
 {
+    [EnableCors()]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
@@ -26,7 +28,7 @@ namespace BookStoreApp.Controllers
 
         [AllowAnonymous]
         [HttpPost("Register")]
-        public ActionResult RegisterUser(User userData)
+        public ActionResult RegisterUser([FromBody] User userData)
         {
             try
             {
@@ -45,7 +47,7 @@ namespace BookStoreApp.Controllers
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public ActionResult LoginUser(Login userData)
+        public ActionResult LoginUser([FromBody] Login userData)
         {
             try
             {
@@ -65,7 +67,7 @@ namespace BookStoreApp.Controllers
 
         [AllowAnonymous]
         [HttpPost("ForgotPassword")]
-        public ActionResult ForgotPassword(string email)
+        public ActionResult ForgotPassword([FromBody] string email)
         {
             try
             {
@@ -82,14 +84,14 @@ namespace BookStoreApp.Controllers
             }
         }
 
-        [Authorize(Roles =Role.User)]
+        [Authorize(Roles = Role.User)]
         [HttpPut("resetpassword/{token}")]
-        public ActionResult ResetPassword([FromRoute] string token, [FromBody] ResetPassword reset)
+        public async Task<ActionResult> ResetPassword([FromRoute] string token, [FromBody] ResetPassword reset)
         {
             if (reset != null && token != null)
             {
                 //extracting userId from token
-                string email = GetEmailFromToken();
+                string email = await GetEmailFromToken();
                 if (email != null)
                 {
                     User updatedUser = userBL.ResetPassword(email, reset);
@@ -102,11 +104,40 @@ namespace BookStoreApp.Controllers
             return NotFound(new { Success = false, Messgae = "Invalid User Details" });
         }
 
-        private string GetEmailFromToken()
+        private async Task<string> GetEmailFromToken()
         {
-            //getting user details from token
-            return User.FindFirst(user => user.Type == ClaimTypes.Email).Value;
+            string email = "";
+            await Task.Run(() =>
+           //getting user details from token
+           email = User.FindFirst(user => user.Type == ClaimTypes.Email).Value
+            );
+            return email;
+
         }
-       
+
+        [Authorize]
+        [HttpGet("GetDetails")]
+        public async Task<IActionResult> GetDetails()
+        {
+            try
+            {
+                string email = await GetEmailFromToken();
+                if (email != null)
+                {
+                    var existingUser = await userBL.GetDetails(email);
+                    if (existingUser != null)
+                    {
+                        return Ok(new { Success = true, Message = $"Is an Existing User", data = existingUser });
+                    }
+                }
+                return NotFound(new { Success = false, Message ="Invalid user, please try login/SignUp"});
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
+
+        }
+
     }
 }
