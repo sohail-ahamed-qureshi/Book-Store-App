@@ -50,6 +50,31 @@ namespace BookStoreApp.Controllers
             }
         }
 
+
+        [HttpGet("{typeOf}")]
+        public IActionResult GetAddresses([FromRoute] string typeOf )
+        {
+            try
+            {
+                int userId = GetUserIDFromToken();
+                if (userId != 0 && typeOf != "")
+                {
+                    var address = addressBL.GetAddress(userId, typeOf);
+                    if (address != null)
+                    {
+                        return Ok(new { Success = true, Message = $"address", data = address });
+                    }
+                    return BadRequest(new { Success = false, Message = "Address is Not present" });
+                }
+                return BadRequest(new { Success = false, Message = "Invalid Details" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
+        }
+
+
         [HttpPost]
         public IActionResult AddAddresses([FromBody]AddressRequest reqData)
         {

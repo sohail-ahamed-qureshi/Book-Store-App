@@ -24,13 +24,18 @@ namespace BookStoreCommonLayer
 
     public class CartResponse
     {
+        public int CartId { get; set; }
+        public int WishlistId { get; set; }
         public int BookId { get; set; }
         public string FullName { get; set; }
         public string BookName { get; set; }
         public string Author { get; set; }
         public string Description { get; set; }
-        public decimal Price  { get; set; }
+        public decimal TotalPrice  { get; set; }
+        public decimal Price { get; set; }
         public int Quantity { get; set; }
+        public string Image { get; set; }
+
     }
 
     public class WishlistRequest

@@ -13,5 +13,6 @@ namespace BookStoreRepositoryLayer.Interface
         User Login(Login userData);
         User ForgotPassword(string userName);
         User ResetPassword(User existingUser, string password);
+        Task<User> UpdateDetails(UserDetails reqData, int userId);
     }
 }

@@ -81,11 +81,13 @@ namespace BookStoreRepositoryLayer.Services
                         {
                             CartResponse cart = new CartResponse
                             {
-                                BookId = dataReader.GetInt32(0),
-                                FullName = dataReader.GetString(1),
-                                BookName = dataReader.GetString(2) == null ? string.Empty : dataReader.GetString(2),
-                                Author = dataReader.GetString(3) == null ? string.Empty : dataReader.GetString(3),
-                                Price = dataReader.GetDecimal(4)
+                                WishlistId= dataReader.GetInt32(0),
+                                BookId = dataReader.GetInt32(1),
+                                FullName = dataReader.GetString(2),
+                                BookName = dataReader.GetString(3) == null ? string.Empty : dataReader.GetString(3),
+                                Author = dataReader.GetString(4) == null ? string.Empty : dataReader.GetString(4),
+                                Price = dataReader.GetDecimal(5),
+                                Image= dataReader.GetString(6)
                             };
                             cartItems.Add(cart);
                         }

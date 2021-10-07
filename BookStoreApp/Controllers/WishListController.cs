@@ -51,7 +51,7 @@ namespace BookStoreApp.Controllers
 
 
         [HttpPost]
-        public IActionResult AddItemtoWishlist(int bookId)
+        public IActionResult AddItemtoWishlist([FromBody]int bookId)
         {
             try
             {
@@ -68,9 +68,9 @@ namespace BookStoreApp.Controllers
                     {
                         return Ok(new { Success = true, Message = $"Item added to wishlist", data = wishlistItem });
                     }
-                    return BadRequest(new { Success = false, Message = "Item add failed" });
+                    return Ok(new { Success = false, Message = "Item already exists" });
                 }
-                return BadRequest(new { Success = false, Message = "Invalid Details" });
+                return BadRequest(new { Success = false, Message = "Invalid Details, Please Login/SignUp" });
             }
             catch (Exception ex)
             {

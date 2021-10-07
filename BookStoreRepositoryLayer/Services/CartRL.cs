@@ -93,13 +93,17 @@ namespace BookStoreRepositoryLayer.Services
                         while (dataReader.Read())
                         {
                             CartResponse cart = new CartResponse
-                            {
+                            {                    
                                 FullName = dataReader.GetString(0),
                                 BookName = dataReader.GetString(1) == null ? string.Empty : dataReader.GetString(1),
                                 Author = dataReader.GetString(2) == null ? string.Empty : dataReader.GetString(2),
                                 Description = dataReader.GetString(3) == null ? string.Empty : dataReader.GetString(3),
-                                Price = dataReader.GetDecimal(4),
-                                Quantity = dataReader.GetInt32(5)
+                                TotalPrice = dataReader.GetDecimal(4),
+                                Quantity = dataReader.GetInt32(5),
+                                BookId= dataReader.GetInt32(6),
+                                Image=dataReader.GetString(7),
+                                Price=dataReader.GetDecimal(8),
+                                CartId=dataReader.GetInt32(9)
                             };
                             cartItems.Add(cart);
                         }

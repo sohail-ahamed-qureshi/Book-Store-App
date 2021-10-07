@@ -9,5 +9,7 @@ namespace BookStoreBusinessLayer.Interface
     {
         IEnumerable<AddressResponse> GetAddresses(int userId);
         AddressResponse AddAddress(AddressRequest reqData, int userId);
+
+        AddressResponse GetAddress(int userId, string typeOf);
     }
 }

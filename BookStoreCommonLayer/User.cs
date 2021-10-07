@@ -73,4 +73,19 @@ namespace BookStoreCommonLayer
         public int UserId { get; set; }
         public string Role { get; set; }
     }
+
+    public class UserDetails
+    {
+        [Required(ErrorMessage = "Name is required")]
+        [RegularExpression(@"^[a-zA-Z]+([\s][a-zA-Z]+)*", ErrorMessage = "Please enter a valid name ")]
+        public string FullName { get; set; }
+        [Required(ErrorMessage = "Email is required")]
+        [RegularExpression(@"^[a-zA-Z0-9]+[._+-]{0,1}[0-9a-zA-Z]+[@][a-zA-Z]+[.][a-zA-Z]{2,3}([.][a-zA-Z]{2,3}){0,1}$", ErrorMessage = "Please enter a valid email address")]
+        public string Email { get; set; }
+        
+        public string Password { get; set; }
+        [Required(ErrorMessage = "Mobile Number is required")]
+        [RegularExpression("^[0-9]{10,}$", ErrorMessage = "Please enter a valid Mobile Number")]
+        public long MobileNumber { get; set; }
+    }
 }

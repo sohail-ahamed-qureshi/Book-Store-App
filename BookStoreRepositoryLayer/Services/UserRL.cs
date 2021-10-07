@@ -82,6 +82,7 @@ namespace BookStoreRepositoryLayer.Services
                             existingUser.Password = dataReader.GetString(2);
                             existingUser.UserId = dataReader.GetInt32(3);
                             existingUser.Role = dataReader.GetString(4);
+                            existingUser.MobileNumber = dataReader.GetInt64(5);
                         }
                         return existingUser;
                     }
@@ -178,6 +179,53 @@ namespace BookStoreRepositoryLayer.Services
                     Email = email
                 };
                 user = Login(login);
+            });
+            return user;
+        }
+
+        public async Task<User> UpdateDetails(UserDetails reqData, int userId)
+        {
+            User user = new User();
+            await Task.Run(() =>
+            {
+                SqlConnection connection = new SqlConnection(connectionString);
+                try
+                {
+                    using (connection)
+                    {
+                        string spName = "spUpdateUser";
+                        SqlCommand command = new SqlCommand(spName, connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        connection.Open();
+                        command.Parameters.AddWithValue("@email", reqData.Email);
+                        command.Parameters.AddWithValue("@fullName", reqData.FullName);
+                        command.Parameters.AddWithValue("@mobile", reqData.MobileNumber);
+                        command.Parameters.AddWithValue("@userId", userId);
+
+                        SqlDataReader dataReader = command.ExecuteReader();
+                        if (dataReader.HasRows)
+                        {
+                            User existingUser = new User();
+                            while (dataReader.Read())
+                            {
+                                existingUser.FullName = dataReader.GetString(0);
+                                existingUser.Email = dataReader.GetString(1);
+                                existingUser.MobileNumber = dataReader.GetInt64(2);
+                            }
+                            return existingUser;
+                        }
+                        return null;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
             });
             return user;
         }

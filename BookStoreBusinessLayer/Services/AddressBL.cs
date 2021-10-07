@@ -28,6 +28,11 @@ namespace BookStoreBusinessLayer.Services
             return null;
         }
 
+        public AddressResponse GetAddress(int userId, string typeOf)
+        {
+            return addressRL.GetAddress(userId, typeOf);
+        }
+
         public AddressResponse AddAddress(AddressRequest reqData, int userId)
         {
             if(reqData != null || userId != 0)

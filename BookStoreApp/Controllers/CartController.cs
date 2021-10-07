@@ -40,7 +40,7 @@ namespace BookStoreApp.Controllers
                     {
                         return Ok(new { success = true, message = $"you have {cartitems.Count} items in cart", data = cartitems });
                     }
-                    return Ok(new { success = true, message = $"your cart is Empty" });
+                    return Ok(new { success = true, message = $"your cart is Empty", data = cartitems });
                 }
                 return BadRequest(new { success = false, message = "Invalid Details" });
             }
@@ -64,6 +64,7 @@ namespace BookStoreApp.Controllers
                     {
                         return Ok(new { success = true, message = $"Item added to card" });
                     }
+                    return Ok(new { success = true, message = "Item already exists in cart" });
                 }
                 return BadRequest(new { success = false, message = "Invalid Details" });
             }

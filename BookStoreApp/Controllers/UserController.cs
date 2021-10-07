@@ -55,7 +55,7 @@ namespace BookStoreApp.Controllers
                 if (user != null)
                 {
                     string token = userBL.GenerateToken(user.Email, user.UserId, user.Role);
-                    return Ok(new { Success = false, Message = "Login Successfull", data = user, Token = token });
+                    return Ok(new { Success = true, Message = "Login Successfull", data = user, Token = token });
                 }
                 return Ok(new { Success = false, Message = "Login Failed" });
             }
@@ -115,7 +115,18 @@ namespace BookStoreApp.Controllers
 
         }
 
-        [Authorize]
+        private async Task<int> GetIdFromToken()
+        {
+            int userId = 0;
+            await Task.Run(() =>
+           //getting user details from token
+           userId = Convert.ToInt32(User.FindFirst(user => user.Type == "userId").Value)
+            );
+            return userId;
+
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("GetDetails")]
         public async Task<IActionResult> GetDetails()
         {
@@ -130,7 +141,32 @@ namespace BookStoreApp.Controllers
                         return Ok(new { Success = true, Message = $"Is an Existing User", data = existingUser });
                     }
                 }
-                return NotFound(new { Success = false, Message ="Invalid user, please try login/SignUp"});
+                return NotFound(new { Success = false, Message = "Invalid user, please try login/SignUp", data = "" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
+
+        }
+
+        [HttpPut("UpdateDetails")]
+        public async Task<IActionResult> UpdateDetails(UserDetails reqData)
+        {
+            try
+            {
+                string email = await GetEmailFromToken();
+                int userId = await GetIdFromToken();
+                if (email != null && userId > 0)
+                {
+                    var existingUser = await userBL.UpdateDetails(reqData, userId);
+                    if (existingUser != null)
+                    {
+                        return Ok(new { Success = true, Message = $"User Data Updated", data = existingUser });
+                    }
+                    return NotFound(new { Success = false, Message = "Invalid user details", data = "" });
+                }
+                return NotFound(new { Success = false, Message = "Invalid user, please try login/SignUp", data = "" });
             }
             catch (Exception ex)
             {

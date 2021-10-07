@@ -210,5 +210,14 @@ namespace BookStoreBusinessLayer.Services
         {
             return await userRL.GetDetails(email);
         }
+
+        public async Task<User> UpdateDetails(UserDetails reqData, int userId)
+        {
+            if(reqData != null)
+            {
+                return await userRL.UpdateDetails(reqData, userId);
+            }
+            return null;
+        }
     }
 }

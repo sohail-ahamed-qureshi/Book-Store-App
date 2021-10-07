@@ -100,7 +100,9 @@ namespace BookStoreRepositoryLayer.Services
                                     Quantity = dataReader.GetInt32(3),
                                     OrderDate = dataReader.GetDateTime(4),
                                     Price = dataReader.GetDecimal(5),
-                                    TotalPrice = dataReader.GetDecimal(6)
+                                    TotalPrice = dataReader.GetDecimal(6),
+                                    Image=dataReader.GetString(7),
+                                    Author=dataReader.GetString(8)
                                 };
                                 ordersList.Add(orderResponse);
                             }

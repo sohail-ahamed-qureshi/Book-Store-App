@@ -114,5 +114,52 @@ namespace BookStoreRepositoryLayer.Services
                 connection.Close();
             }
         }
+
+
+        public AddressResponse GetAddress(int userId, string typeOf)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    string spName = "spGetAddressOfType";
+                    SqlCommand command = new SqlCommand(spName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@typeOf", typeOf);
+                    SqlDataReader dataReader = command.ExecuteReader();
+                    if (dataReader.HasRows)
+                    {
+                        AddressResponse address = new AddressResponse();
+                        while (dataReader.Read())
+                        {
+                            address = new AddressResponse
+                            {
+                                AddressId = dataReader.GetInt32(0),
+                                UserId = dataReader.GetInt32(1),
+                                FullName = dataReader.GetString(2),
+                                Addresses = dataReader.GetString(3),
+                                City = dataReader.GetString(4),
+                                State = dataReader.GetString(5),
+                                MobileNumber = dataReader.GetInt64(6),
+                                typeOf = dataReader.GetString(7)
+                            };
+                        }
+                        return address;
+                    }
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
     }
 }

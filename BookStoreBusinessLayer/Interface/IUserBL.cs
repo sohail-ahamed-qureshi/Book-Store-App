@@ -15,5 +15,7 @@ namespace BookStoreBusinessLayer.Interface
         User ResetPassword(string userId, ResetPassword resetPassword);
 
         Task<User> GetDetails(string email);
+        Task<User> UpdateDetails(UserDetails reqData, int userId);
+
     }
 }
