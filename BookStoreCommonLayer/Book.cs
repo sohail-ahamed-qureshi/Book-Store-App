@@ -8,7 +8,6 @@ namespace BookStoreCommonLayer
     public class Book
     {
         public int BookId { get; set; }
-        [Required]
         public string BookName { get; set; }
         public string Author { get; set; }
         public string Description { get; set; }
@@ -18,12 +17,4 @@ namespace BookStoreCommonLayer
         public int Quantity { get; set; }
     }
 
-    public class BookRequest
-    {
-        public string BookName { get; set; }
-        public string Author { get; set; }
-        public string Description { get; set; }
-        public string Image { get; set; }
-        public double Price { get; set; }
-    }
 }

@@ -11,8 +11,8 @@ namespace BookStoreCommonLayer
         public string BookName { get; set; }
         public string Author { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
-        public decimal Rating { get; set; }
+        public double Price { get; set; }
+        public double Rating { get; set; }
         public string Image { get; set; }
         public int Quantity { get; set; }
     }
@@ -22,8 +22,8 @@ namespace BookStoreCommonLayer
         public string BookName { get; set; }
         public string Author { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
-        public decimal Rating { get; set; }
+        public double Price { get; set; }
+        public double Rating { get; set; }
         public string Image { get; set; }
         public int Quantity { get; set; }
     }

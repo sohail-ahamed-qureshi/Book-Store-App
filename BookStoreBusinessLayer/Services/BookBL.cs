@@ -4,6 +4,7 @@ using BookStoreRepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BookStoreBusinessLayer.Services
 {
@@ -15,12 +16,30 @@ namespace BookStoreBusinessLayer.Services
             this.bookRL = bookRL;
         }
 
+        public async Task<BooksResponse> AddBook(BooksRequest reqData)
+        {
+            if (reqData != null)
+            {
+                return await bookRL.AddBook(reqData);
+            }
+            return null;
+        }
+
         public List<Book> GetAllBooks()
         {
             var allbooks = bookRL.GetAllBooks();
             if(allbooks.Count != 0)
             {
                 return allbooks;
+            }
+            return null;
+        }
+
+        public async Task<BooksResponse> UpdateBook(BooksResponse reqData)
+        {
+            if (reqData != null)
+            {
+                return await bookRL.UpdateBook(reqData);
             }
             return null;
         }

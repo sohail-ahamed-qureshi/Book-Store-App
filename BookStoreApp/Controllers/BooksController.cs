@@ -1,4 +1,5 @@
-﻿using BookStoreCommonLayer;
+﻿using BookStoreBusinessLayer.Interface;
+using BookStoreCommonLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,9 +16,67 @@ namespace BookStoreApp.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        public BooksController()
+        private IBookBL booksBL;
+        public BooksController(IBookBL booksBL)
         {
-                
+            this.booksBL = booksBL;                
+        }
+
+
+        private async Task<int> GetUserIDFromToken()
+        {
+            int userId = 0;
+            await Task.Run( ()=>
+                userId = Convert.ToInt32(User.FindFirst(user => user.Type == "userId").Value)
+            );
+            return userId;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddBook(BooksRequest reqData)
+        {
+            try
+            {
+                int userId =await GetUserIDFromToken();
+                if (userId != 0)
+                {
+                    var bookAdded = await booksBL.AddBook(reqData);
+                    if (bookAdded != null)
+                    {
+                        return Ok(new { Success = true, Message = $"Book Added Successfully", data = bookAdded });
+                    }
+                    return BadRequest(new { Success = false, Message = "Book Add failed" });
+                }
+                return BadRequest(new { Success = false, Message = "Invalid Details" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
+        }
+
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateBook(BooksResponse reqData)
+        {
+            try
+            {
+                int userId = await GetUserIDFromToken();
+                if (userId != 0)
+                {
+                    var bookUpdated = await booksBL.UpdateBook(reqData);
+                    if (bookUpdated != null)
+                    {
+                        return Ok(new { Success = true, Message = $"Book Updated Successfully", data = bookUpdated });
+                    }
+                    return BadRequest(new { Success = false, Message = "Book Update failed" });
+                }
+                return BadRequest(new { Success = false, Message = "Invalid Details" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
         }
     }
 }
