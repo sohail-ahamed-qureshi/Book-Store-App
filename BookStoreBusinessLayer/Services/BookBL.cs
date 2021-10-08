@@ -25,6 +25,15 @@ namespace BookStoreBusinessLayer.Services
             return null;
         }
 
+        public async Task<BooksResponse> DeleteBook(int bookId)
+        {
+            if (bookId != 0)
+            {
+                return await bookRL.DeleteBook(bookId);
+            }
+            return null;
+        }
+
         public List<Book> GetAllBooks()
         {
             var allbooks = bookRL.GetAllBooks();

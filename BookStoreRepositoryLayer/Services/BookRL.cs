@@ -76,6 +76,55 @@ namespace BookStoreRepositoryLayer.Services
             }
         }
 
+        public async Task<BooksResponse> DeleteBook(int bookId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                BooksResponse book = new BooksResponse();
+                await Task.Run(() =>
+                {
+                    using (connection)
+                    {
+                        string spName = "spDeleteBook";
+                        SqlCommand command = new SqlCommand(spName, connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@bookId", bookId);                
+                        connection.Open();
+                        SqlDataReader dataReader = command.ExecuteReader();
+                        if (dataReader.HasRows)
+                        {
+                            while (dataReader.Read())
+                            {
+                                book = new BooksResponse
+                                {
+                                    BookId = dataReader.GetInt32(0),
+                                    BookName = dataReader.GetString(1) == null ? string.Empty : dataReader.GetString(1),
+                                    Author = dataReader.GetString(2) == null ? string.Empty : dataReader.GetString(2),
+                                    Description = dataReader.GetString(3) == null ? string.Empty : dataReader.GetString(3),
+                                    Price = Convert.ToDouble(dataReader.GetDecimal(4)),
+                                    Rating = Convert.ToDouble(dataReader.GetDecimal(5)),
+                                    Image = dataReader.GetString(6),
+                                    Quantity = dataReader.GetInt32(7)
+                                };
+                            }
+                            return book;
+                        }
+                        return null;
+                    }
+                });
+                return book;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
         public List<Book> GetAllBooks()
         {
             SqlConnection connection = new SqlConnection(connectionString);

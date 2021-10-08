@@ -19,25 +19,25 @@ namespace BookStoreApp.Controllers
         private IBookBL booksBL;
         public BooksController(IBookBL booksBL)
         {
-            this.booksBL = booksBL;                
+            this.booksBL = booksBL;
         }
 
 
         private async Task<int> GetUserIDFromToken()
         {
             int userId = 0;
-            await Task.Run( ()=>
-                userId = Convert.ToInt32(User.FindFirst(user => user.Type == "userId").Value)
+            await Task.Run(() =>
+               userId = Convert.ToInt32(User.FindFirst(user => user.Type == "userId").Value)
             );
             return userId;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBook(BooksRequest reqData)
+        public async Task<IActionResult> AddBook([FromBody] BooksRequest reqData)
         {
             try
             {
-                int userId =await GetUserIDFromToken();
+                int userId = await GetUserIDFromToken();
                 if (userId != 0)
                 {
                     var bookAdded = await booksBL.AddBook(reqData);
@@ -57,7 +57,7 @@ namespace BookStoreApp.Controllers
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateBook(BooksResponse reqData)
+        public async Task<IActionResult> UpdateBook([FromBody] BooksResponse reqData)
         {
             try
             {
@@ -70,6 +70,29 @@ namespace BookStoreApp.Controllers
                         return Ok(new { Success = true, Message = $"Book Updated Successfully", data = bookUpdated });
                     }
                     return BadRequest(new { Success = false, Message = "Book Update failed" });
+                }
+                return BadRequest(new { Success = false, Message = "Invalid Details" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{bookId}")]
+        public async Task<IActionResult> DeleteBook([FromRoute] int bookId)
+        {
+            try
+            {
+                int userId = await GetUserIDFromToken();
+                if (userId != 0)
+                {
+                    var bookdeleted = await booksBL.DeleteBook(bookId);
+                    if (bookdeleted != null)
+                    {
+                        return Ok(new { Success = true, Message = $"Book Deleted Successfully", data = bookdeleted });
+                    }
+                    return BadRequest(new { Success = false, Message = "Book Delete failed" });
                 }
                 return BadRequest(new { Success = false, Message = "Invalid Details" });
             }

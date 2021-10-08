@@ -11,5 +11,6 @@ namespace BookStoreRepositoryLayer.Interface
         List<Book> GetAllBooks();
         Task<BooksResponse> AddBook(BooksRequest reqData);
         Task<BooksResponse> UpdateBook(BooksResponse reqData);
+        Task<BooksResponse> DeleteBook(int bookId);
     }
 }
